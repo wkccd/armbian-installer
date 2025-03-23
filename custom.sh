@@ -49,14 +49,14 @@ case $extension in
 esac
 
 # 统一重命名（仅限 zip 需要）
-if [ "$extension" = "zip" ]; then
+
   if [ -n "$final_name" ]; then
     mv "$final_name" "imm/custom.img"
   else
     echo "❌ ZIP 文件中未找到 .img 文件"
     exit 1
   fi
-fi
+
 
 # 检查最终文件
 if [ -f "imm/custom.img" ]; then
