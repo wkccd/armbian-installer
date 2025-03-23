@@ -30,7 +30,8 @@ case $extension in
   gz)
     echo "处理 gz 格式..."
     gunzip -f "$OUTPUT_PATH" || true
-    final_name="imm/custom.img"
+    final_name=$(find imm -name '*.img' -print -quit)
+    mv "$final_name" "imm/custom.img"
     ;;
   zip)
     echo "处理 zip 格式..."
