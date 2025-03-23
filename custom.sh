@@ -49,7 +49,7 @@ case $extension in
 esac
 
 # 统一重命名（仅限 zip 需要）
-
+echo "====$final_name"
   if [ -n "$final_name" ]; then
     mv "$final_name" "imm/custom.img"
   else
