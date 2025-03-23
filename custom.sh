@@ -68,3 +68,11 @@ else
   exit 1
 fi
 
+mkdir -p output
+docker run --privileged --rm \
+        -v $(pwd)/output:/output \
+        -v $(pwd)/supportFiles:/supportFiles:ro \
+        -v $(pwd)/imm/custom.img:/mnt/custom.img \
+        debian:buster \
+        /supportFiles/custom/build.sh
+
