@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       download_url:
-        description: '请输入下载地址(扩展名 .img.gz/xz/zip)'
+        description: '请输入下载地址(扩展名 .img.gz/.img.xz/.img.zip)'
         required: true
-        default: 'https://default.example.com/file.img.gz'  
+        default: 'https://default.example.com/file.img.gz'
 
 jobs:
   build-release:
@@ -24,23 +24,19 @@ jobs:
 
       - name: Validate Download URL
         run: |
-            # 定义默认值（必须与 YAML 中 inputs.download_url.default 一致）
-            DEFAULT_URL="https://default.example.com/file.img.gz"
-            USER_INPUT_URL="${{ github.event.inputs.download_url }}"
-        
-            # 检查是否使用默认值
-            if [[ "$USER_INPUT_URL" == "$DEFAULT_URL" ]]; then
-              echo "❌ 错误：请修改默认下载地址！当前地址为无效占位符。"
-              echo "👉 操作提示：在手动触发工作流时，在输入框中替换下载地址。"
-              exit 1
-            fi
-        
-            # 检查地址格式
-            if [[ ! "$USER_INPUT_URL" =~ ^https?://.+\.img\.gz$ ]]; then
-              echo "❌ 错误：地址需以 http(s) 开头且以 .img.gz 结尾，当前输入：$USER_INPUT_URL"
-              exit 1
-            fi
-        
+          DEFAULT_URL="https://default.example.com/file.img.gz"
+          USER_INPUT_URL="${{ github.event.inputs.download_url }}"
+          
+          if [[ "$USER_INPUT_URL" == "$DEFAULT_URL" ]]; then
+            echo "❌ 错误：请修改默认下载地址！当前地址为无效占位符。"
+            exit 1
+          fi
+          
+          if [[ ! "$USER_INPUT_URL" =~ ^https?://.+\.img\.(gz|xz|zip)(\?.*)?$ ]]; then
+            echo "❌ 错误：地址需以 http(s) 开头且扩展名为 .img.gz/.img.xz/.img.zip"
+            echo "当前输入：$USER_INPUT_URL"
+            exit 1
+          fi
 
       - name: "Build Image"
         run: |
