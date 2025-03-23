@@ -36,26 +36,19 @@ case $extension in
     echo "处理 zip 格式..."
     unzip -j -o "$OUTPUT_PATH" -d imm/  # -j 忽略目录结构 
     final_name=$(find imm -name '*.img' -print -quit)
+    mv "$final_name" "imm/custom.img"
     ;;
   xz)
     echo "处理 xz 格式..."
     xz -d --keep "$OUTPUT_PATH"  # 保留原文件 
     final_name="${OUTPUT_PATH%.*}"
+    mv "$final_name" "imm/custom.img"
     ;;
   *)
     echo "❌ 不支持的压缩格式: $extension"
     exit 1
     ;;
 esac
-
-# 统一重命名（仅限 zip 需要）
-echo "====$final_name"
-  if [ -n "$final_name" ]; then
-    mv "$final_name" "imm/custom.img"
-  else
-    echo "❌ ZIP 文件中未找到 .img 文件"
-    exit 1
-  fi
 
 
 # 检查最终文件
