@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       download_url:
-        description: '请输入下载地址(格式必须为 .img.gz)'
+        description: '请输入下载地址(扩展名 .img.gz/xz/zip)'
         required: true
-        default: 'https://default.example.com/file.img.gz'  # 修正默认值
+        default: 'https://default.example.com/file.img.gz'  
 
 jobs:
   build-release:
