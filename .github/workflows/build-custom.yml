@@ -1,4 +1,4 @@
-name: "Build Custom OpenWrt Installer ISO"
+name: "Build Custom Installer ISO to Artifact"
 
 on:
   workflow_dispatch:
@@ -21,7 +21,7 @@ jobs:
         run: |
           chmod +x "${{ github.workspace }}/custom.sh"
           chmod +x "${{ github.workspace }}/supportFiles/custom/build.sh"
-
+          
       - name: Validate Download URL
         run: |
           DEFAULT_URL="https://default.example.com/file.img.gz"
@@ -37,17 +37,15 @@ jobs:
             echo "当前输入：$USER_INPUT_URL"
             exit 1
           fi
-
+          
       - name: "Build Image"
         run: |
           download_url="${{ github.event.inputs.download_url }}"
           ./custom.sh "$download_url"
-
-      - name: "Publish"
-        uses: softprops/action-gh-release@v2.2.1
+          
+      - name: "Upload Artifact"
+        uses: actions/upload-artifact@v4
         with:
-          tag_name: "Custom-Installer-x86_64-ISO"
-          body_path: "${{ github.workspace }}/supportFiles/custom/info.md"
-          files: |
-            output/custom-installer-x86_64.iso
-          token: "${{ secrets.GITHUB_TOKEN }}"
+          name: custom-installer-iso
+          path: output/custom-installer-x86_64.iso
+          retention-days: 7  # 可选：设置保留天数（默认90天）
